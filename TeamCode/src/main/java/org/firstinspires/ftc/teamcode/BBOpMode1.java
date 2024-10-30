@@ -81,8 +81,8 @@ public class BBOpMode1 extends LinearOpMode {
                 // ** recheck this
                 //Drive and Strafe
                 FLW.setPower(drivePower);
-                FRW.setPower(-strafePower);
-                BLW.setPower(-strafePower);
+                FRW.setPower(strafePower);
+                BLW.setPower(strafePower);
                 BRW.setPower(drivePower);
             } else {
                 // just driving
@@ -94,14 +94,14 @@ public class BBOpMode1 extends LinearOpMode {
         } else if(turnPower != 0){
             // just turning
             FLW.setPower(turnPower);
-            FRW.setPower(-turnPower);
+            FRW.setPower(turnPower);
             BLW.setPower(turnPower);
-            BRW.setPower(-turnPower);
+            BRW.setPower(turnPower);
         } else if(strafePower != 0){
             // just strafing
             FLW.setPower(strafePower);
-            FRW.setPower(-strafePower);
-            BLW.setPower(-strafePower);
+            FRW.setPower(strafePower);
+            BLW.setPower(strafePower);
             BRW.setPower(strafePower);
         } else {
             FRW.setPower(0);
