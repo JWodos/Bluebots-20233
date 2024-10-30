@@ -87,9 +87,9 @@ public class BBOpMode1 extends LinearOpMode {
             } else {
                 // just driving
                 FRW.setPower(drivePower);
-                FLW.setPower(drivePower);
+                FLW.setPower(-drivePower);
                 BRW.setPower(drivePower);
-                BLW.setPower(drivePower);
+                BLW.setPower(-drivePower);
             }
         } else if(turnPower != 0){
             // just turning
