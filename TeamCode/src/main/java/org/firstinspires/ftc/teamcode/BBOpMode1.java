@@ -111,9 +111,9 @@ public class BBOpMode1 extends LinearOpMode {
         } else if(strafePower != 0){
             // just strafing
             FLW.setPower(strafePower);
-            FRW.setPower(strafePower);
+            FRW.setPower(-strafePower);
             BLW.setPower(strafePower);
-            BRW.setPower(strafePower);
+            BRW.setPower(-strafePower);
             //not doing anything
         } else {
             FRW.setPower(0);
