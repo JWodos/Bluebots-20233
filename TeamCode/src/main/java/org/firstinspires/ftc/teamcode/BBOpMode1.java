@@ -71,7 +71,6 @@ public class BBOpMode1 extends LinearOpMode {
 
         //if drive
         if(drivePower != 0){
-            /*
             //also turn
             if(turnPower != 0){
                 //Drive and Turn
@@ -90,14 +89,12 @@ public class BBOpMode1 extends LinearOpMode {
                 //only driving
             }
              else {
-             */
                 // just driving
                 FRW.setPower(drivePower);
                 FLW.setPower(-drivePower);
                 BRW.setPower(drivePower);
                 BLW.setPower(-drivePower);
-            //}
-
+            }
 
             //not driving
             //only turns
