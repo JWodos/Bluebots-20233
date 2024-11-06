@@ -18,6 +18,7 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor HLS;
     private Servo Claw;
     private Servo Wrist;
+    private Servo Bucket;
 
     @Override
     public void runOpMode() {
@@ -30,6 +31,7 @@ public class BBOpMode1 extends LinearOpMode {
         HLS = hardwareMap.get(DcMotor.class,"HLS");
         Claw = hardwareMap.get(Servo.class,"Claw");
         Wrist = hardwareMap.get(Servo.class,"Wrist");
+        Bucket = hardwareMap.get(Servo.class,"Bucket");
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -61,7 +63,7 @@ public class BBOpMode1 extends LinearOpMode {
         double turnPower = 0;
 
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
-        drivePower = -movepad.left_stick_y;
+        drivePower = movepad.left_stick_y;
 
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
         strafePower = movepad.left_stick_x;
@@ -69,8 +71,10 @@ public class BBOpMode1 extends LinearOpMode {
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
         turnPower = movepad.right_stick_x;
 
-        //if drive
+
         if(drivePower != 0){
+             /*if drive
+
             //also turn
             if(turnPower != 0){
                 //Drive and Turn
@@ -79,7 +83,10 @@ public class BBOpMode1 extends LinearOpMode {
                 BRW.setPower(drivePower);
                 BLW.setPower(turnPower);
                 //or strafe
-            } else if(strafePower  != 0){
+
+            }
+
+            else if(strafePower  != 0){
                 // ** recheck this
                 //Drive and Strafe
                 FLW.setPower(drivePower);
@@ -89,21 +96,22 @@ public class BBOpMode1 extends LinearOpMode {
                 //only driving
             }
              else {
+                 */
                 // just driving
                 FRW.setPower(drivePower);
                 FLW.setPower(drivePower);
                 BRW.setPower(drivePower);
                 BLW.setPower(drivePower);
-            }
+            //}
 
             //not driving
             //only turns
         } else if(turnPower != 0){
             // just turning
             FLW.setPower(turnPower);
-            FRW.setPower(-turnPower);
+            FRW.setPower(turnPower);
             BLW.setPower(turnPower);
-            BRW.setPower(-turnPower);
+            BRW.setPower(turnPower);
             //only strafe
         } else if(strafePower != 0){
             // just strafing
@@ -182,29 +190,37 @@ public class BBOpMode1 extends LinearOpMode {
             HLS.setPower(0);
         }
 
-        // uses the gamepad's X button as a switch to tilt and un-tilt the outtake's "claw's" bucket
-        // (1 = tilt, 0 = not tilt)
+
         if(armpad.right_trigger>0.5) {
-            if(Claw.getPosition() < 0.5) {
-                Claw.setPosition(1);
-            } else {
-                Claw.setPosition(0);
+            if(Claw.getPosition()!=1) {
+                Claw.setPosition(Claw.getPosition() + 0.1);
+            }
+        }
+        if(armpad.right_bumper) {
+            if(Claw.getPosition()!=0) {
+                Claw.setPosition(Claw.getPosition() - 0.1);
             }
         }
 
-        // uses the gamepad's circle button as a switch to open and unopen the intake's claw
-        // (1 = open, 0 = closed)
+
         if(armpad.left_trigger>0.5) {
-            if(Wrist.getPosition() < 0.5) {
-                Wrist.setPosition(1);
-            } else {
-                Wrist.setPosition(0);
+            if(Wrist.getPosition()!=1) {
+                Wrist.setPosition(Wrist.getPosition() + 0.1);
+            }
+        }
+        if(armpad.left_bumper) {
+            if(Wrist.getPosition()!=0) {
+                Wrist.setPosition(Wrist.getPosition() - 0.1);
             }
         }
 
         // pressing the triangle to trigger whatever actions will happen to hang/climb
-        if(armpad.triangle) {
-            // trigger hanging maneuver
+        if(armpad.circle) {
+            Bucket.setPosition(1);
+        }
+        if(armpad.x){
+            Bucket.setPosition(0);
+
         }
     }
 }
