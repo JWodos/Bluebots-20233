@@ -64,16 +64,17 @@ public class BBOpMode1 extends LinearOpMode {
 
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
         drivePower = movepad.left_stick_y;
-
+        telemetry.addData("drivePower", drivePower);
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
         strafePower = movepad.left_stick_x;
-
+        telemetry.addData("strafePower", strafePower);
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
         turnPower = movepad.right_stick_x;
+        telemetry.addData("turnPower", turnPower);
 
 
         if(drivePower != 0){
-             /*if drive
+            /*if drive
 
             //also turn
             if(turnPower != 0){
