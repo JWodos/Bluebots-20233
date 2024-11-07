@@ -170,6 +170,11 @@ public class BBOpMode1 extends LinearOpMode {
     }
 
     public void moveArm(Gamepad armpad){
+<<<<<<< Updated upstream
+=======
+        // ** the functions below are for the polymorphism bot **
+        // presets servo positions
+>>>>>>> Stashed changes
 
         // powers the robot's (arm) motors using the game pad 2 left joystick
         // (this will make the arm's motor power vary depending on how much you're using the joystick.
@@ -191,12 +196,18 @@ public class BBOpMode1 extends LinearOpMode {
         }
 
         if(armpad.right_trigger>0.5) {
+<<<<<<< Updated upstream
             if(Claw.getPosition()>0) {
                 Claw.setPosition(Claw.getPosition() - 0.01);
+=======
+            if(Claw.getPosition()<1) {
+                Claw.setPosition(Claw.getPosition() + 0.01);
+>>>>>>> Stashed changes
             }
         }
 
         if(armpad.right_bumper) {
+<<<<<<< Updated upstream
             if(Claw.getPosition()<0.5) {
                 Claw.setPosition(Claw.getPosition() + 0.01);
             }
@@ -205,21 +216,35 @@ public class BBOpMode1 extends LinearOpMode {
         if(armpad.left_trigger>0.5) {
             if(Wrist.getPosition()>0) {
                 Wrist.setPosition(Wrist.getPosition() - 0.01);
+=======
+            Claw.setPosition(Claw.getPosition() - 0.01);
+        }
+
+        if(armpad.left_trigger>0.5) {
+            if(Wrist.getPosition()<1) {
+                Wrist.setPosition(Wrist.getPosition() + 0.01);
+>>>>>>> Stashed changes
             }
         }
 
         if(armpad.left_bumper) {
+<<<<<<< Updated upstream
             if(Wrist.getPosition()<0.5) {
                 Wrist.setPosition(Wrist.getPosition() + 0.01);
             }
+=======
+            Wrist.setPosition(Wrist.getPosition() - 0.01);
+>>>>>>> Stashed changes
         }
 
         // pressing the triangle to trigger whatever actions will happen to hang/climb
         if(armpad.circle) {
             Bucket.setPosition(0.33);
         }
+
         if(armpad.x){
             Bucket.setPosition(0);
         }
+
     }
 }
