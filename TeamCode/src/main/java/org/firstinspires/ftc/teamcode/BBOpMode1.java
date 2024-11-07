@@ -38,6 +38,9 @@ public class BBOpMode1 extends LinearOpMode {
 
         waitForStart();
 
+        Claw.setPosition(0);
+        Wrist.setPosition(0);
+        Bucket.setPosition(0);
         while (opModeIsActive()) {
             moveWheels(gamepad1);
             moveArm(gamepad2);
@@ -167,10 +170,6 @@ public class BBOpMode1 extends LinearOpMode {
     }
 
     public void moveArm(Gamepad armpad){
-        // ** the functions below are for the polymorphism bot **
-        // presets servo positions
-        Claw.setPosition(0);
-        Wrist.setPosition(0);
 
         // powers the robot's (arm) motors using the game pad 2 left joystick
         // (this will make the arm's motor power vary depending on how much you're using the joystick.
@@ -191,35 +190,33 @@ public class BBOpMode1 extends LinearOpMode {
             HLS.setPower(0);
         }
 
-        /*
         if(armpad.right_trigger>0.5) {
-            if(Claw.getPosition()!=1) {
-                Claw.setPosition(Claw.getPosition() + 0.1);
+            if(Claw.getPosition()>0) {
+                Claw.setPosition(Claw.getPosition() - 0.01);
             }
         }
-        */
 
         if(armpad.right_bumper) {
-            //if(Claw.getPosition()!=0) {
-                Claw.setPosition(1);
-                //Claw.setPosition(Claw.getPosition() + 0.1);
-            //}
+            if(Claw.getPosition()<0.5) {
+                Claw.setPosition(Claw.getPosition() + 0.01);
+            }
         }
 
         if(armpad.left_trigger>0.5) {
-            if(Wrist.getPosition()!=1) {
-                Wrist.setPosition(Wrist.getPosition() + 0.1);
+            if(Wrist.getPosition()>0) {
+                Wrist.setPosition(Wrist.getPosition() - 0.01);
             }
         }
+
         if(armpad.left_bumper) {
-            if(Wrist.getPosition()!=0) {
-                Wrist.setPosition(Wrist.getPosition() - 0.1);
+            if(Wrist.getPosition()<0.5) {
+                Wrist.setPosition(Wrist.getPosition() + 0.01);
             }
         }
 
         // pressing the triangle to trigger whatever actions will happen to hang/climb
         if(armpad.circle) {
-            Bucket.setPosition(1);
+            Bucket.setPosition(0.33);
         }
         if(armpad.x){
             Bucket.setPosition(0);
