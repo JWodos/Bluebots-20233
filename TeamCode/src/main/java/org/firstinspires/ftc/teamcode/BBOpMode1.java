@@ -201,7 +201,8 @@ public class BBOpMode1 extends LinearOpMode {
 
         if(armpad.right_bumper) {
             //if(Claw.getPosition()!=0) {
-                Claw.setPosition(Claw.getPosition() + 0.1);
+                Claw.setPosition(1);
+                //Claw.setPosition(Claw.getPosition() + 0.1);
             //}
         }
 
