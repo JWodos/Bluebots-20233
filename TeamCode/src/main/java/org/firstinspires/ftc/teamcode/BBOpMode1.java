@@ -191,18 +191,19 @@ public class BBOpMode1 extends LinearOpMode {
             HLS.setPower(0);
         }
 
-
+        /*
         if(armpad.right_trigger>0.5) {
             if(Claw.getPosition()!=1) {
                 Claw.setPosition(Claw.getPosition() + 0.1);
             }
         }
-        if(armpad.right_bumper) {
-            if(Claw.getPosition()!=0) {
-                Claw.setPosition(Claw.getPosition() - 0.1);
-            }
-        }
+        */
 
+        if(armpad.right_bumper) {
+            //if(Claw.getPosition()!=0) {
+                Claw.setPosition(Claw.getPosition() + 0.1);
+            //}
+        }
 
         if(armpad.left_trigger>0.5) {
             if(Wrist.getPosition()!=1) {
@@ -221,7 +222,6 @@ public class BBOpMode1 extends LinearOpMode {
         }
         if(armpad.x){
             Bucket.setPosition(0);
-
         }
     }
 }
