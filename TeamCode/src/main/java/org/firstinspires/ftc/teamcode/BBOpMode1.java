@@ -38,6 +38,10 @@ public class BBOpMode1 extends LinearOpMode {
 
         waitForStart();
 
+        Claw.setPosition(0);
+        Wrist.setPosition(0);
+        Bucket.setPosition(0);
+
         while (opModeIsActive()) {
             moveWheels(gamepad1);
             moveArm(gamepad2);
@@ -51,6 +55,7 @@ public class BBOpMode1 extends LinearOpMode {
             telemetry.addData("Intake Arm Motor Power", HLS.getPower());
             telemetry.addData("Outtake Claw Servo Position", Claw.getPosition());
             telemetry.addData("Intake Claw Servo Position", Wrist.getPosition());
+            telemetry.addData("Bucket", Bucket.getPosition());
 
             telemetry.addData("Status", "Running");
             telemetry.update();
@@ -167,62 +172,49 @@ public class BBOpMode1 extends LinearOpMode {
     }
 
     public void moveArm(Gamepad armpad){
-        // ** the functions below are for the polymorphism bot **
-        // presets servo positions
-        Claw.setPosition(0);
-        Wrist.setPosition(0);
-
-        // powers the robot's (arm) motors using the game pad 2 left joystick
-        // (this will make the arm's motor power vary depending on how much you're using the joystick.
-        // this can be changed later if we want the motor to have a constant power no matter what
-        // value the joystick is giving)
-        // linear slide(s) for outtake arm
-        // (provides a threshold for deactivating motor power since joystick may not be at exactly 0)
         if(armpad.left_stick_y > 0.25 || armpad.left_stick_y < -0.25) {
             VLS.setPower(-armpad.left_stick_y);
         } else {
             VLS.setPower(0);
         }
 
-        // same logic for intake and outtake linear slides
         if(armpad.right_stick_y > 0.25 || armpad.right_stick_y < -0.25) {
             HLS.setPower(-armpad.right_stick_y);
         } else {
             HLS.setPower(0);
         }
 
-        /*
         if(armpad.right_trigger>0.5) {
-            if(Claw.getPosition()!=1) {
-                Claw.setPosition(Claw.getPosition() + 0.1);
+            if(Claw.getPosition()>0) {
+                Claw.setPosition(Claw.getPosition() - 0.01);
             }
         }
-        */
 
         if(armpad.right_bumper) {
-            //if(Claw.getPosition()!=0) {
-                Claw.setPosition(1);
-                //Claw.setPosition(Claw.getPosition() + 0.1);
-            //}
+            if(Claw.getPosition()<0.5) {
+                Claw.setPosition(Claw.getPosition() + 0.01);
+            }
         }
 
         if(armpad.left_trigger>0.5) {
-            if(Wrist.getPosition()!=1) {
-                Wrist.setPosition(Wrist.getPosition() + 0.1);
-            }
-        }
-        if(armpad.left_bumper) {
-            if(Wrist.getPosition()!=0) {
-                Wrist.setPosition(Wrist.getPosition() - 0.1);
+            if(Wrist.getPosition()>0) {
+                Wrist.setPosition(Wrist.getPosition() - 0.01);
             }
         }
 
-        // pressing the triangle to trigger whatever actions will happen to hang/climb
-        if(armpad.circle) {
-            Bucket.setPosition(1);
+        if(armpad.left_bumper) {
+            if(Wrist.getPosition()<1) {
+                Wrist.setPosition(Wrist.getPosition() + 0.01);
+            }
         }
-        if(armpad.x){
+
+        if(armpad.x) {
+            Bucket.setPosition(0.33);
+        }
+
+        if(armpad.triangle){
             Bucket.setPosition(0);
         }
+
     }
 }
