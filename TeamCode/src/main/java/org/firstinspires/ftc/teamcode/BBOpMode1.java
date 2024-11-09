@@ -53,6 +53,8 @@ public class BBOpMode1 extends LinearOpMode {
 
             telemetry.addData("Outtake Arm Motor Power", VLS.getPower());
             telemetry.addData("Intake Arm Motor Power", HLS.getPower());
+            telemetry.addData("HLS Position", HLS.getCurrentPosition());
+            telemetry.addData("VLS Position", VLS.getCurrentPosition());
             telemetry.addData("Outtake Claw Servo Position", Claw.getPosition());
             telemetry.addData("Intake Claw Servo Position", Wrist.getPosition());
             telemetry.addData("Bucket", Bucket.getPosition());
@@ -121,9 +123,9 @@ public class BBOpMode1 extends LinearOpMode {
             //only strafe
         } else if(strafePower != 0){
             // just strafing
-            FLW.setPower(strafePower);
+            FLW.setPower(-strafePower);
             FRW.setPower(-strafePower);
-            BLW.setPower(-strafePower);
+            BLW.setPower(strafePower);
             BRW.setPower(strafePower);
             //not doing anything
         } else {
