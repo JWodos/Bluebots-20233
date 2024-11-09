@@ -40,7 +40,7 @@ public class BBOpMode1 extends LinearOpMode {
 
         Claw.setPosition(0);
         Wrist.setPosition(0);
-        Bucket.setPosition(0);
+        Bucket.setPosition(0.33);
 
         while (opModeIsActive()) {
             moveWheels(gamepad1);
@@ -172,6 +172,7 @@ public class BBOpMode1 extends LinearOpMode {
     }
 
     public void moveArm(Gamepad armpad){
+
         if(armpad.left_stick_y > 0.25 || armpad.left_stick_y < -0.25) {
             VLS.setPower(-armpad.left_stick_y);
         } else {
@@ -196,6 +197,7 @@ public class BBOpMode1 extends LinearOpMode {
             }
         }
 
+        //writs
         if(armpad.left_trigger>0.5) {
             if(Wrist.getPosition()>0) {
                 Wrist.setPosition(Wrist.getPosition() - 0.01);
@@ -203,17 +205,17 @@ public class BBOpMode1 extends LinearOpMode {
         }
 
         if(armpad.left_bumper) {
-            if(Wrist.getPosition()<1) {
+            if(Wrist.getPosition()<0.5) {
                 Wrist.setPosition(Wrist.getPosition() + 0.01);
             }
         }
 
         if(armpad.x) {
-            Bucket.setPosition(0.33);
+            Bucket.setPosition(0.1);
         }
 
-        if(armpad.triangle){
-            Bucket.setPosition(0);
+        if(Bucket.getPosition()<0.33) {
+            Bucket.setPosition(Bucket.getPosition() + 0.001);
         }
 
     }
