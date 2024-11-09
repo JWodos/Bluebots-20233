@@ -109,10 +109,10 @@ public class BBOpMode1 extends LinearOpMode {
             //only turns
         } else if(turnPower != 0){
             // just turning
-            FLW.setPower(turnPower);
-            FRW.setPower(turnPower);
-            BLW.setPower(turnPower);
-            BRW.setPower(turnPower);
+            FLW.setPower(-turnPower);
+            FRW.setPower(-turnPower);
+            BLW.setPower(-turnPower);
+            BRW.setPower(-turnPower);
             //only strafe
         } else if(strafePower != 0){
             // just strafing
