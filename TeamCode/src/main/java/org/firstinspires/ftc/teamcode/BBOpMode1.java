@@ -13,7 +13,6 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor BLW;
     private DcMotor BRW;
 
-
     private DcMotor VLS;
     private DcMotor HLS;
     private Servo Claw;
@@ -69,21 +68,74 @@ public class BBOpMode1 extends LinearOpMode {
         double strafePower = 0;
         double turnPower = 0;
 
-        // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
-        drivePower = movepad.left_stick_y;
+        drivePower = movepad.left_stick_y * 0.1;
         telemetry.addData("drivePower", drivePower);
-        // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
-        strafePower = movepad.left_stick_x;
+        strafePower = movepad.left_stick_x * 0.1;
         telemetry.addData("strafePower", strafePower);
-        // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
-        turnPower = movepad.right_stick_x;
+        turnPower = movepad.right_stick_x * 0.1;
         telemetry.addData("turnPower", turnPower);
 
+<<<<<<< Updated upstream
         if(drivePower != 0||strafePower != 0||turnPower != 0){
             FLW.setPower(drivePower+turnPower+strafePower);
             FRW.setPower(drivePower-turnPower-strafePower);
             BLW.setPower(drivePower+turnPower-strafePower);
             BRW.setPower(drivePower-turnPower+strafePower);
+=======
+
+        if(drivePower != 0){
+            /*if drive
+
+            //also turn
+            if(turnPower != 0){
+                //Drive and Turn
+                FRW.setPower(drivePower);
+                FLW.setPower(turnPower);
+                BRW.setPower(drivePower);
+                BLW.setPower(turnPower);
+                //or strafe
+
+            }
+
+            else if(strafePower  != 0){
+                // ** recheck this
+                //Drive and Strafe
+                FLW.setPower(drivePower);
+                FRW.setPower(-strafePower);
+                BLW.setPower(-strafePower);
+                BRW.setPower(drivePower);
+                //only driving
+            }
+             else {
+                 */
+
+                //Front wheels (R&L)
+                FRW.setPower(-drivePower);
+                FLW.setPower(drivePower);
+
+                //Back wheels (R&L)
+                BRW.setPower(-drivePower);
+                BLW.setPower(drivePower);
+
+            //}
+
+            //not driving
+            //only turns
+        } else if(turnPower != 0){
+            // just turning
+            FLW.setPower(-turnPower);
+            FRW.setPower(-turnPower);
+            BLW.setPower(-turnPower);
+            BRW.setPower(-turnPower);
+            //only strafe
+        } else if(strafePower != 0){
+            // just strafing
+            FLW.setPower(-strafePower);
+            FRW.setPower(-strafePower);
+            BLW.setPower(strafePower);
+            BRW.setPower(strafePower);
+            //not doing anything
+>>>>>>> Stashed changes
         } else {
             FRW.setPower(0);
             FLW.setPower(0);
