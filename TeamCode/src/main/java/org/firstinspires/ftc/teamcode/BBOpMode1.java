@@ -84,6 +84,63 @@ public class BBOpMode1 extends LinearOpMode {
             FRW.setPower(drivePower-turnPower-strafePower);
             BLW.setPower(drivePower+turnPower-strafePower);
             BRW.setPower(drivePower-turnPower+strafePower);
+<<<<<<< Updated upstream
+=======
+
+        if(drivePower != 0){
+            /*if drive
+
+            //also turn
+            if(turnPower != 0){
+                //Drive and Turn
+                FRW.setPower(drivePower);
+                FLW.setPower(turnPower);
+                BRW.setPower(drivePower);
+                BLW.setPower(turnPower);
+                //or strafe
+
+            }
+
+            else if(strafePower  != 0){
+                // ** recheck this
+                //Drive and Strafe
+                FLW.setPower(drivePower);
+                FRW.setPower(-strafePower);
+                BLW.setPower(-strafePower);
+                BRW.setPower(drivePower);
+                //only driving
+            }
+             else {
+                 */
+
+                //Front wheels (R&L)
+                FRW.setPower(-drivePower);
+                FLW.setPower(drivePower);
+
+                //Back wheels (R&L)
+                BRW.setPower(-drivePower);
+                BLW.setPower(drivePower);
+
+            //}
+
+            //not driving
+            //only turns
+        } else if(turnPower != 0){
+            // just turning
+            FLW.setPower(-turnPower);
+            FRW.setPower(-turnPower);
+            BLW.setPower(-turnPower);
+            BRW.setPower(-turnPower);
+            //only strafe
+        } else if(strafePower != 0){
+            // just strafing
+            FLW.setPower(-strafePower);
+            FRW.setPower(-strafePower);
+            BLW.setPower(strafePower);
+            BRW.setPower(strafePower);
+            //not doing anything
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
         } else {
             FRW.setPower(0);
             FLW.setPower(0);
