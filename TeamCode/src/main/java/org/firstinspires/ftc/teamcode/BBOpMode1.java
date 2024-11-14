@@ -164,7 +164,7 @@ public class BBOpMode1 extends LinearOpMode {
         }
 
         if(armpad.left_bumper) {
-            if(Wrist.getPosition()<0.5) {
+            if(Wrist.getPosition()<1) {
                 Wrist.setPosition(Wrist.getPosition() + 0.01);
             }
         }
