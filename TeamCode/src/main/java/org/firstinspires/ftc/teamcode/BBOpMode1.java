@@ -65,21 +65,37 @@ public class BBOpMode1 extends LinearOpMode {
     }
 
     public void moveWheels(Gamepad movepad){
-        double drivePower = 0;
-        double strafePower = 0;
-        double turnPower = 0;
 
+        //right wheels are backward
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
-        drivePower = movepad.left_stick_y;
-        telemetry.addData("drivePower", drivePower);
+        boolean driveFor = movepad.dpad_up;
+        boolean driveBack = movepad.dpad_down;
+        int driveF10 = driveFor ? 1 : 0;
+        int driveB10 = driveBack ? 1 : 0;
+        double drivePower = driveF10-driveB10;
+        telemetry.addData("driveFor", driveFor);
+        telemetry.addData("driveBack", driveBack);
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
-        strafePower = movepad.left_stick_x;
-        telemetry.addData("strafePower", strafePower);
+        boolean strafeLeft= movepad.dpad_left;
+        boolean strafeRight= movepad.dpad_right;
+        int strafeL10 = strafeLeft ? 1 : 0;
+        int strafeR10 = strafeRight ? 1 : 0;
+        double strafePower = driveF10-driveB10;
+        telemetry.addData("strafeRight", strafeRight);
+        telemetry.addData("strafeLeft", strafeLeft);
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
-        turnPower = movepad.right_stick_x;
+        double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
 
-        if(drivePower != 0||strafePower != 0||turnPower != 0){
+        boolean decelerate = movepad.x;
+        if(decelerate){
+            drivePower*=0.5;
+            turnPower*=0.5;
+            strafePower+=0.5;
+        }
+
+
+       if(drivePower != 0||strafePower != 0||turnPower != 0){
             FLW.setPower(drivePower+turnPower+strafePower);
             FRW.setPower(drivePower-turnPower-strafePower);
             BLW.setPower(drivePower+turnPower-strafePower);
@@ -90,44 +106,6 @@ public class BBOpMode1 extends LinearOpMode {
             BRW.setPower(0);
             BLW.setPower(0);
         }
-
-
-        /* vv things i tried but couldn't figure out vv
-
-        boolean motorsPowered = false;
-
-        // basically, if none of the game pad 1 joysticks are being used, this means the robot's
-        // wheels shouldn't be moving, meaning those motors should return to a power of 0
-        if(drivePower == 0 && strafePower == 0 && turnPower == 0){
-            motorsPowered = false;
-        } else {
-            motorsPowered = true;
-        }
-
-        // gives different power values to the motors (depending on the action being done) if the
-        // joysticks are being used
-        if(motorsPowered){
-            // driving and strafing
-            if(drivePower != 0 && strafePower != 0){
-                // im not exactly sure if this will work, i just copied it from last year's code
-                FRW.setPower(-strafePower);
-                FLW.setPower(drivePower);
-                BRW.setPower(drivePower);
-                BLW.setPower(-strafePower);
-                // just driving
-            } if(drivePower != 0){
-                FLW.setPower(drivePower);
-                FRW.setPower(drivePower);
-                BLW.setPower(drivePower);
-                BRW.setPower(drivePower);
-            }
-        } else {
-            FLW.setPower(0);
-            FRW.setPower(0);
-            BLW.setPower(0);
-            BRW.setPower(0);
-        }
-        */
     }
 
     public void moveArm(Gamepad armpad){
