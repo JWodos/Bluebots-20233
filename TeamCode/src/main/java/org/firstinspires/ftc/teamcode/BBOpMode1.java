@@ -79,61 +79,18 @@ public class BBOpMode1 extends LinearOpMode {
         turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
 
-
-        if(drivePower != 0){
-            /*if drive
-
-            //also turn
-            if(turnPower != 0){
-                //Drive and Turn
-                FRW.setPower(drivePower);
-                FLW.setPower(turnPower);
-                BRW.setPower(drivePower);
-                BLW.setPower(turnPower);
-                //or strafe
-
-            }
-
-            else if(strafePower  != 0){
-                // ** recheck this
-                //Drive and Strafe
-                FLW.setPower(drivePower);
-                FRW.setPower(-strafePower);
-                BLW.setPower(-strafePower);
-                BRW.setPower(drivePower);
-                //only driving
-            }
-             else {
-                 */
-                // just driving
-                FRW.setPower(-drivePower);
-                FLW.setPower(drivePower);
-                BRW.setPower(-drivePower);
-                BLW.setPower(drivePower);
-            //}
-
-            //not driving
-            //only turns
-        } else if(turnPower != 0){
-            // just turning
-            FLW.setPower(-turnPower);
-            FRW.setPower(-turnPower);
-            BLW.setPower(-turnPower);
-            BRW.setPower(-turnPower);
-            //only strafe
-        } else if(strafePower != 0){
-            // just strafing
-            FLW.setPower(-strafePower);
-            FRW.setPower(-strafePower);
-            BLW.setPower(strafePower);
-            BRW.setPower(strafePower);
-            //not doing anything
+        if(drivePower != 0||strafePower != 0||turnPower != 0){
+            FLW.setPower(drivePower+turnPower+strafePower);
+            FRW.setPower(drivePower-turnPower-strafePower);
+            BLW.setPower(drivePower+turnPower-strafePower);
+            BRW.setPower(drivePower-turnPower+strafePower);
         } else {
             FRW.setPower(0);
             FLW.setPower(0);
             BRW.setPower(0);
             BLW.setPower(0);
         }
+
 
         /* vv things i tried but couldn't figure out vv
 
