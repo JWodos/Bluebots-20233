@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Bluebots-20233.iml" filepath="$PROJECT_DIR$/.idea/Bluebots-20233.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.main.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/Bluebots-20233.FtcRobotController.unitTest.iml" />
