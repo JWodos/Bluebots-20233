@@ -43,7 +43,7 @@ public class BBOpMode1 extends LinearOpMode {
 
         while (opModeIsActive()) {
             moveWheels(gamepad1);
-            moveArm(gamepad2);
+            //moveArm(gamepad2);
 
             telemetry.addData("FLW Motor Power", FLW.getPower());
             telemetry.addData("FRW Motor Power", FRW.getPower());
