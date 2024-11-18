@@ -65,7 +65,6 @@ public class BBOpMode1 extends LinearOpMode {
     }
 
     public void moveWheels(Gamepad movepad){
-<<<<<<< Updated upstream
 
         //right wheels are backward
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
@@ -87,56 +86,31 @@ public class BBOpMode1 extends LinearOpMode {
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
         double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
-
-        boolean decelerate = movepad.x;
-        if(decelerate){
+        
+        if(movepad.x){
             drivePower*=0.5;
             turnPower*=0.5;
-            strafePower+=0.5;
+            strafePower*=0.5;
         }
 
-
-       if(drivePower != 0||strafePower != 0||turnPower != 0){
-            FLW.setPower(drivePower+turnPower+strafePower);
-            FRW.setPower(drivePower-turnPower-strafePower);
-            BLW.setPower(drivePower+turnPower-strafePower);
-            BRW.setPower(drivePower-turnPower+strafePower);
-=======
-        // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
-        double drivePower = movepad.left_stick_y;
         telemetry.addData("drivePower", drivePower);
-        // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
-        double strafePower = movepad.right_stick_x;
         telemetry.addData("strafePower", strafePower);
-        // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
-        double turnPower = movepad.left_stick_x;
         telemetry.addData("turnPower", turnPower);
 
-        if(drivePower < 0){
-            if(turnPower < 0) {
-                FLW.setPower(-0.1);
-                FRW.setPower(0);
-                BLW.setPower(0);
-                BRW.setPower(0.1);
-            } else if(turnPower > 0){
-                FLW.setPower(0);
-                FRW.setPower(0.1);
-                BLW.setPower(-0.1);
-                BRW.setPower(0);
-            } else {
-                FLW.setPower(-0.1);
-                FRW.setPower(0.1);
-                BLW.setPower(-0.1);
-                BRW.setPower(0.1);
-            }
+        if(drivePower != 0){
 
->>>>>>> Stashed changes
+            FRW.setPower(drivePower);
+            FLW.setPower(-drivePower);
+            BRW.setPower(drivePower);
+            BLW.setPower(-drivePower);
+
         } else {
             FRW.setPower(0);
             FLW.setPower(0);
             BRW.setPower(0);
             BLW.setPower(0);
         }
+
     }
 
     public void moveArm(Gamepad armpad){

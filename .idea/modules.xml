@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Bluebots-20233.TeamCode.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Bluebots-20233.TeamCode.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Bluebots-20233.TeamCode.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Bluebots-20233.TeamCode.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Bluebots-20233.TeamCode.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Bluebots-20233.TeamCode.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/Robot.Bluebots-20233.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/Robot.Bluebots-20233.FtcRobotController.iml" />
     </modules>
   </component>
 </project>
