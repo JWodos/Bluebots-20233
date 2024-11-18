@@ -103,13 +103,13 @@ public class BBOpMode1 extends LinearOpMode {
             BRW.setPower(drivePower-turnPower+strafePower);
 
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
-        double drivePower = movepad.left_stick_y;
+           drivePower = movepad.left_stick_y;
         telemetry.addData("drivePower", drivePower);
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
-        double strafePower = movepad.right_stick_x;
+        strafePower = movepad.right_stick_x;
         telemetry.addData("strafePower", strafePower);
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
-        double turnPower = movepad.left_stick_x;
+        turnPower = movepad.left_stick_x;
         telemetry.addData("turnPower", turnPower);
 
         if(drivePower < 0){
@@ -130,7 +130,7 @@ public class BBOpMode1 extends LinearOpMode {
                 BRW.setPower(0.1);
             }
 
->>>>>>> Stashed changes
+
         } else {
             FRW.setPower(0);
             FLW.setPower(0);
