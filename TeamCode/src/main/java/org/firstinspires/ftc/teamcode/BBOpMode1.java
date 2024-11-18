@@ -66,7 +66,6 @@ public class BBOpMode1 extends LinearOpMode {
 
     public void moveWheels(Gamepad movepad){
 
-
         //right wheels are backward
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
         boolean driveFor = movepad.dpad_up;
@@ -81,15 +80,15 @@ public class BBOpMode1 extends LinearOpMode {
         boolean strafeRight= movepad.dpad_right;
         int strafeL10 = strafeLeft ? 1 : 0;
         int strafeR10 = strafeRight ? 1 : 0;
-        double strafePower = strafeL10-driveB10;
+        double strafePower = strafeL10-strafeR10;
         telemetry.addData("strafeRight", strafeRight);
         telemetry.addData("strafeLeft", strafeLeft);
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
         double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
 
-        boolean decelerate = movepad.x;
-        if(decelerate){
+        if(movepad.x){
+            telemetry.addData("wendy", movepad.x);
             drivePower*=0.5;
             turnPower*=0.5;
             strafePower+=0.5;
@@ -99,24 +98,12 @@ public class BBOpMode1 extends LinearOpMode {
         telemetry.addData("strafePower", strafePower);
         telemetry.addData("turnPower", turnPower);
 
-        if(drivePower < 0){
-            if(turnPower < 0) {
-                FLW.setPower(-0.1);
-                FRW.setPower(0);
-                BLW.setPower(0);
-                BRW.setPower(0.1);
-            } else if(turnPower > 0){
-                FLW.setPower(0);
-                FRW.setPower(0.1);
-                BLW.setPower(-0.1);
-                BRW.setPower(0);
-            } else {
-                FLW.setPower(-0.1);
-                FRW.setPower(0.1);
-                BLW.setPower(-0.1);
-                BRW.setPower(0.1);
-            }
+        if(drivePower != 0){
 
+            FRW.setPower(drivePower*0.2);
+            FLW.setPower(-drivePower*0.2);
+            BRW.setPower(drivePower*0.2);
+            BLW.setPower(-drivePower*0.2);
 
         } else {
             FRW.setPower(0);
