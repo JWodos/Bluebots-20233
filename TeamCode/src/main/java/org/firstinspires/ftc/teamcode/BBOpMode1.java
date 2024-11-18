@@ -65,7 +65,7 @@ public class BBOpMode1 extends LinearOpMode {
     }
 
     public void moveWheels(Gamepad movepad){
-<<<<<<< Updated upstream
+
 
         //right wheels are backward
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
@@ -101,7 +101,7 @@ public class BBOpMode1 extends LinearOpMode {
             FRW.setPower(drivePower-turnPower-strafePower);
             BLW.setPower(drivePower+turnPower-strafePower);
             BRW.setPower(drivePower-turnPower+strafePower);
-=======
+
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
         double drivePower = movepad.left_stick_y;
         telemetry.addData("drivePower", drivePower);
