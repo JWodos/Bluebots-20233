@@ -81,7 +81,7 @@ public class BBOpMode1 extends LinearOpMode {
         boolean strafeRight= movepad.dpad_right;
         int strafeL10 = strafeLeft ? 1 : 0;
         int strafeR10 = strafeRight ? 1 : 0;
-        double strafePower = driveF10-driveB10;
+        double strafePower = strafeL10-driveB10;
         telemetry.addData("strafeRight", strafeRight);
         telemetry.addData("strafeLeft", strafeLeft);
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
