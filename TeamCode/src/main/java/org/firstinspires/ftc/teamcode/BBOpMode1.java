@@ -88,12 +88,16 @@ public class BBOpMode1 extends LinearOpMode {
         double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
 
-        boolean decelerate = movepad.x;
-        if(decelerate){
+
+
+        if(movepad.x){
+
             drivePower*=0.5;
             turnPower*=0.5;
             strafePower+=0.5;
         }
+
+
 
         telemetry.addData("drivePower", drivePower);
         telemetry.addData("strafePower", strafePower);
