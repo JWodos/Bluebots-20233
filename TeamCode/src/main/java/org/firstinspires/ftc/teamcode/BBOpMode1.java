@@ -19,6 +19,7 @@ public class BBOpMode1 extends LinearOpMode {
     private Servo Claw;
     private Servo Wrist;
     private Servo Bucket;
+    private int counter;
 
     @Override
     public void runOpMode() {
@@ -32,6 +33,8 @@ public class BBOpMode1 extends LinearOpMode {
         Claw = hardwareMap.get(Servo.class,"Claw");
         Wrist = hardwareMap.get(Servo.class,"Wrist");
         Bucket = hardwareMap.get(Servo.class,"Bucket");
+        counter=0;
+        telemetry.addData("counter", counter);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -59,6 +62,7 @@ public class BBOpMode1 extends LinearOpMode {
             telemetry.addData("Intake Claw Servo Position", Wrist.getPosition());
             telemetry.addData("Bucket", Bucket.getPosition());
 
+
             telemetry.addData("Status", "Running");
             telemetry.update();
         }
@@ -76,12 +80,13 @@ public class BBOpMode1 extends LinearOpMode {
         double drivePower = driveF10-driveB10;
         telemetry.addData("driveFor", driveFor);
         telemetry.addData("driveBack", driveBack);
+
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
         boolean strafeLeft= movepad.dpad_left;
         boolean strafeRight= movepad.dpad_right;
         int strafeL10 = strafeLeft ? 1 : 0;
         int strafeR10 = strafeRight ? 1 : 0;
-        double strafePower = strafeL10-driveB10;
+        double strafePower = strafeL10-strafeR10;
         telemetry.addData("strafeRight", strafeRight);
         telemetry.addData("strafeLeft", strafeLeft);
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
@@ -103,32 +108,51 @@ public class BBOpMode1 extends LinearOpMode {
         telemetry.addData("strafePower", strafePower);
         telemetry.addData("turnPower", turnPower);
 
-        if(drivePower < 0){
-            if(turnPower < 0) {
-                FLW.setPower(-0.1);
-                FRW.setPower(0);
-                BLW.setPower(0);
-                BRW.setPower(0.1);
-            } else if(turnPower > 0){
-                FLW.setPower(0);
-                FRW.setPower(0.1);
-                BLW.setPower(-0.1);
-                BRW.setPower(0);
-            } else {
-                FLW.setPower(-0.1);
-                FRW.setPower(0.1);
-                BLW.setPower(-0.1);
-                BRW.setPower(0.1);
-            }
+        if(movepad.x){
+            telemetry.addData("wendy", movepad.x);
+            drivePower*=0.5;
+            turnPower*=0.5;
+            strafePower+=0.5;
+        }
 
+
+
+
+
+        boolean one = true;
+        if(drivePower != 0) {
+
+            if(one && counter<5) {
+                counter++;
+                one = false;
+            }
+            FRW.setPower(drivePower * 0.2*counter);
+            FLW.setPower(-drivePower * 0.2*counter);
+            BRW.setPower(drivePower * 0.2*counter);
+            BLW.setPower(-drivePower * 0.2*counter);
+
+        } else if(strafePower != 0){
+            if(one && counter<5) {
+                counter++;
+                one = false;
+            }
+            FRW.setPower(-strafePower * 0.2*counter);
+            FLW.setPower(-strafePower * 0.2*counter);
+            BRW.setPower(strafePower * 0.2*counter);
+            BLW.setPower(strafePower * 0.2*counter);
 
         } else {
+
+            counter =0;
             FRW.setPower(0);
             FLW.setPower(0);
             BRW.setPower(0);
             BLW.setPower(0);
         }
+
     }
+
+
 
     public void moveArm(Gamepad armpad){
 
