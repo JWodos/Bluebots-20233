@@ -13,13 +13,13 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor BLW;
     private DcMotor BRW;
 
-
-    private DcMotor VLS;
-    private DcMotor HLS;
+    private DcMotor wormDL;
+    private DcMotor wormDR;
+    private DcMotor LS;
     private Servo Claw;
-    private Servo Wrist;
-    private Servo Bucket;
+
     private int counter;
+
 
     @Override
     public void runOpMode() {
@@ -28,13 +28,18 @@ public class BBOpMode1 extends LinearOpMode {
         BLW = hardwareMap.get(DcMotor.class, "BLW");
         BRW = hardwareMap.get(DcMotor.class, "BRW");
 
-        VLS = hardwareMap.get(DcMotor.class,"VLS");
-        HLS = hardwareMap.get(DcMotor.class,"HLS");
+        wormDL = hardwareMap.get(DcMotor.class,"wormDL");
+        wormDR = hardwareMap.get(DcMotor.class,"wormDR");
+        //encoder
+        wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wormDL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //wormDR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        LS = hardwareMap.get(DcMotor.class,"LS");
         Claw = hardwareMap.get(Servo.class,"Claw");
-        Wrist = hardwareMap.get(Servo.class,"Wrist");
-        Bucket = hardwareMap.get(Servo.class,"Bucket");
-        counter=0;
+        counter = 0;
         telemetry.addData("counter", counter);
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -42,26 +47,38 @@ public class BBOpMode1 extends LinearOpMode {
         waitForStart();
 
         Claw.setPosition(0);
-        Wrist.setPosition(0);
-        Bucket.setPosition(0.33);
+
+        //Bucket.setPosition(0.33);
 
         while (opModeIsActive()) {
             moveWheels(gamepad1);
             moveArm(gamepad2);
+
+            //encoder
+            double Lposition = wormDL.getCurrentPosition();
+            //int Rposition = wormDL.getCurrentPosition();
+
+            double CPR = 10766;
+            double revolutions = Lposition/CPR;
+
+            double angle = revolutions * 360;
+            double angleNormalized = angle % 360;
+            // Show the position of the motor on telemetry
+            telemetry.addData("Encoder Position", Lposition);
+
+            telemetry.addData("Encoder Revolutions", revolutions);
+            telemetry.addData("Encoder Angle (Degrees)", angle);
+            telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
 
             telemetry.addData("FLW Motor Power", FLW.getPower());
             telemetry.addData("FRW Motor Power", FRW.getPower());
             telemetry.addData("BLW Motor Power", BLW.getPower());
             telemetry.addData("BRW Motor Power", BRW.getPower());
 
-            telemetry.addData("Outtake Arm Motor Power", VLS.getPower());
-            telemetry.addData("Intake Arm Motor Power", HLS.getPower());
-            telemetry.addData("HLS Position", HLS.getCurrentPosition());
-            telemetry.addData("VLS Position", VLS.getCurrentPosition());
-            telemetry.addData("Outtake Claw Servo Position", Claw.getPosition());
-            telemetry.addData("Intake Claw Servo Position", Wrist.getPosition());
-            telemetry.addData("Bucket", Bucket.getPosition());
+            telemetry.addData("Linear Slide Power", LS.getPower());
+            telemetry.addData("LS Position", LS.getCurrentPosition());
 
+            telemetry.addData("Outtake Claw Servo Position", Claw.getPosition());
 
             telemetry.addData("Status", "Running");
             telemetry.update();
@@ -122,9 +139,12 @@ public class BBOpMode1 extends LinearOpMode {
         boolean one = true;
         if(drivePower != 0) {
 
-            if(one && counter<5) {
-                counter++;
+            if(counter > 5){
                 one = false;
+            }
+
+            if(one) {
+                counter++;
             }
             FRW.setPower(drivePower * 0.2*counter);
             FLW.setPower(-drivePower * 0.2*counter);
@@ -132,17 +152,31 @@ public class BBOpMode1 extends LinearOpMode {
             BLW.setPower(-drivePower * 0.2*counter);
 
         } else if(strafePower != 0){
-            if(one && counter<5) {
-                counter++;
+            if(counter > 5){
                 one = false;
             }
+              if(one) {
+                counter++;
+            }
+
             FRW.setPower(-strafePower * 0.2*counter);
             FLW.setPower(-strafePower * 0.2*counter);
             BRW.setPower(strafePower * 0.2*counter);
             BLW.setPower(strafePower * 0.2*counter);
 
-        } else {
+        } else if(turnPower != 0) {
+            if(counter > 5){
+                one = false;
+            }
+            if(one) {
+                counter++;
+            }
 
+            FRW.setPower(turnPower);
+            FLW.setPower(turnPower);
+            BRW.setPower(turnPower);
+            BLW.setPower(turnPower);
+        }else {
             counter =0;
             FRW.setPower(0);
             FLW.setPower(0);
@@ -156,6 +190,18 @@ public class BBOpMode1 extends LinearOpMode {
 
     public void moveArm(Gamepad armpad){
 
+        if(Math.abs(armpad.left_stick_y)> 0.25) {
+            LS.setPower(-armpad.left_stick_y);
+        } else {
+            LS.setPower(0);
+        }
+
+        if(armpad.circle){
+            if(){
+                wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+        }
+        /*
         if(armpad.left_stick_y > 0.25 || armpad.left_stick_y < -0.25) {
             VLS.setPower(-armpad.left_stick_y);
         } else {
@@ -200,6 +246,8 @@ public class BBOpMode1 extends LinearOpMode {
         if(Bucket.getPosition()<0.33) {
             Bucket.setPosition(Bucket.getPosition() + 0.001);
         }
+        */
+
 
     }
 }
