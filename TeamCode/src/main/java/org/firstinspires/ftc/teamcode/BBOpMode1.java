@@ -13,6 +13,7 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor BLW;
     private DcMotor BRW;
 
+<<<<<<< Updated upstream
     private DcMotor wormDL;
     private DcMotor wormDR;
     private DcMotor LS;
@@ -20,6 +21,14 @@ public class BBOpMode1 extends LinearOpMode {
 
     private int counter;
 
+=======
+    private DcMotor VLS;
+    private DcMotor HLS;
+    private Servo Claw;
+    private Servo Wrist;
+    private Servo Bucket;
+    private int counter;
+>>>>>>> Stashed changes
 
     @Override
     public void runOpMode() {
@@ -37,9 +46,16 @@ public class BBOpMode1 extends LinearOpMode {
 
         LS = hardwareMap.get(DcMotor.class,"LS");
         Claw = hardwareMap.get(Servo.class,"Claw");
+<<<<<<< Updated upstream
         counter = 0;
         telemetry.addData("counter", counter);
 
+=======
+        Wrist = hardwareMap.get(Servo.class,"Wrist");
+        Bucket = hardwareMap.get(Servo.class,"Bucket");
+        counter = 0;
+        telemetry.addData("counter", counter);
+>>>>>>> Stashed changes
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -106,6 +122,7 @@ public class BBOpMode1 extends LinearOpMode {
         double strafePower = strafeL10-strafeR10;
         telemetry.addData("strafeRight", strafeRight);
         telemetry.addData("strafeLeft", strafeLeft);
+
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
         double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
@@ -133,6 +150,7 @@ public class BBOpMode1 extends LinearOpMode {
         }
 
 
+<<<<<<< Updated upstream
 
 
 
@@ -178,10 +196,56 @@ public class BBOpMode1 extends LinearOpMode {
             BLW.setPower(turnPower);
         }else {
             counter =0;
+=======
+        boolean one = true;
+        boolean two = true;
+
+        if(drivePower != 0) {
+
+            if(counter > 5){
+                one = false;
+            }
+
+            if(one) {
+                counter++;
+            }
+
+            FRW.setPower(drivePower * 0.2*counter);
+            FLW.setPower(-drivePower * 0.2*counter);
+            BRW.setPower(drivePower * 0.2*counter);
+            BLW.setPower(-drivePower * 0.2*counter);
+
+
+        } else if(strafePower != 0){
+
+            if(counter > 5){
+                two = false;
+            }
+
+            if(two) {
+                counter++;
+            }
+
+            FRW.setPower(-strafePower * 0.2*counter);
+            FLW.setPower(-strafePower * 0.2*counter);
+            BRW.setPower(strafePower * 0.2*counter);
+            BLW.setPower(strafePower * 0.2*counter);
+
+        } else if(turnPower != 0) {
+
+            FRW.setPower(turnPower);
+            FLW.setPower(turnPower);
+            BRW.setPower(turnPower);
+            BLW.setPower(turnPower);
+
+        } else {
+
+>>>>>>> Stashed changes
             FRW.setPower(0);
             FLW.setPower(0);
             BRW.setPower(0);
             BLW.setPower(0);
+
         }
 
     }
