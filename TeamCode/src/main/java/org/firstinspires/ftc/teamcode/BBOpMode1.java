@@ -150,10 +150,17 @@ public class BBOpMode1 extends LinearOpMode {
 
     public void moveArm(Gamepad armpad){
 
+        LWD.setPower(1);
+        RWD.setPower(1);
+
+        /*
         if(Math.abs(armpad.left_stick_y)> 0.25) {
             LWD.setPower(-armpad.left_stick_y);
+            RWD.setPower(-armpad.left_stick_y);
         } else {
             LWD.setPower(0);
+            RWD.setPower(0);
         }
+         */
     }
 }
