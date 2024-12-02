@@ -13,9 +13,9 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor BLW;
     private DcMotor BRW;
 
-    //private DcMotor wormDL;
-    //private DcMotor wormDR;
-    private DcMotor LS;
+    private DcMotor LWD;
+    private DcMotor RWD;
+    private DcMotor ARM;
 
     private int counter;
 
@@ -26,16 +26,14 @@ public class BBOpMode1 extends LinearOpMode {
         BLW = hardwareMap.get(DcMotor.class, "BLW");
         BRW = hardwareMap.get(DcMotor.class, "BRW");
 
-        //wormDL = hardwareMap.get(DcMotor.class,"wormDL");
-        //wormDR = hardwareMap.get(DcMotor.class,"wormDR");
-        //encoder
-        //wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //wormDL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //wormDR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LWD = hardwareMap.get(DcMotor.class,"LWD");
+        RWD = hardwareMap.get(DcMotor.class,"RWD");
 
-        LS = hardwareMap.get(DcMotor.class,"LS");
-        counter = 0;
-        telemetry.addData("counter", counter);
+        LWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LWD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        RWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RWD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -46,29 +44,13 @@ public class BBOpMode1 extends LinearOpMode {
             moveWheels(gamepad1);
             moveArm(gamepad2);
 
-            //encoder
-            //double Lposition = wormDL.getCurrentPosition();
-            //int Rposition = wormDL.getCurrentPosition();
-
-            double CPR = 10766;
-            //double revolutions = Lposition/CPR;
-
-            //double angle = revolutions * 360;
-            //double angleNormalized = angle % 360;
-            // Show the position of the motor on telemetry
-            //telemetry.addData("Encoder Position", Lposition);
-
-            //telemetry.addData("Encoder Revolutions", revolutions);
-            //telemetry.addData("Encoder Angle (Degrees)", angle);
-            //telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
+            telemetry.addData("LWD Motor Power", LWD.getCurrentPosition());
+            telemetry.addData("RWD Motor Power", RWD.getCurrentPosition());
 
             telemetry.addData("FLW Motor Power", FLW.getPower());
             telemetry.addData("FRW Motor Power", FRW.getPower());
             telemetry.addData("BLW Motor Power", BLW.getPower());
             telemetry.addData("BRW Motor Power", BRW.getPower());
-
-            telemetry.addData("Linear Slide Power", LS.getPower());
-            telemetry.addData("LS Position", LS.getCurrentPosition());
 
             telemetry.addData("Status", "Running");
             telemetry.update();
@@ -169,13 +151,9 @@ public class BBOpMode1 extends LinearOpMode {
     public void moveArm(Gamepad armpad){
 
         if(Math.abs(armpad.left_stick_y)> 0.25) {
-            LS.setPower(-armpad.left_stick_y);
+            LWD.setPower(-armpad.left_stick_y);
         } else {
-            LS.setPower(0);
-        }
-
-        if(armpad.circle){
-            //wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LWD.setPower(0);
         }
     }
 }
