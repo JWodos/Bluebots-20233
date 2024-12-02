@@ -13,22 +13,11 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor BLW;
     private DcMotor BRW;
 
-<<<<<<< Updated upstream
-    private DcMotor wormDL;
-    private DcMotor wormDR;
+    //private DcMotor wormDL;
+    //private DcMotor wormDR;
     private DcMotor LS;
-    private Servo Claw;
 
     private int counter;
-
-=======
-    private DcMotor VLS;
-    private DcMotor HLS;
-    private Servo Claw;
-    private Servo Wrist;
-    private Servo Bucket;
-    private int counter;
->>>>>>> Stashed changes
 
     @Override
     public void runOpMode() {
@@ -37,54 +26,41 @@ public class BBOpMode1 extends LinearOpMode {
         BLW = hardwareMap.get(DcMotor.class, "BLW");
         BRW = hardwareMap.get(DcMotor.class, "BRW");
 
-        wormDL = hardwareMap.get(DcMotor.class,"wormDL");
-        wormDR = hardwareMap.get(DcMotor.class,"wormDR");
+        //wormDL = hardwareMap.get(DcMotor.class,"wormDL");
+        //wormDR = hardwareMap.get(DcMotor.class,"wormDR");
         //encoder
-        wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wormDL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //wormDL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //wormDR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LS = hardwareMap.get(DcMotor.class,"LS");
-        Claw = hardwareMap.get(Servo.class,"Claw");
-<<<<<<< Updated upstream
         counter = 0;
         telemetry.addData("counter", counter);
-
-=======
-        Wrist = hardwareMap.get(Servo.class,"Wrist");
-        Bucket = hardwareMap.get(Servo.class,"Bucket");
-        counter = 0;
-        telemetry.addData("counter", counter);
->>>>>>> Stashed changes
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
 
-        Claw.setPosition(0);
-
-        //Bucket.setPosition(0.33);
-
         while (opModeIsActive()) {
             moveWheels(gamepad1);
             moveArm(gamepad2);
 
             //encoder
-            double Lposition = wormDL.getCurrentPosition();
+            //double Lposition = wormDL.getCurrentPosition();
             //int Rposition = wormDL.getCurrentPosition();
 
             double CPR = 10766;
-            double revolutions = Lposition/CPR;
+            //double revolutions = Lposition/CPR;
 
-            double angle = revolutions * 360;
-            double angleNormalized = angle % 360;
+            //double angle = revolutions * 360;
+            //double angleNormalized = angle % 360;
             // Show the position of the motor on telemetry
-            telemetry.addData("Encoder Position", Lposition);
+            //telemetry.addData("Encoder Position", Lposition);
 
-            telemetry.addData("Encoder Revolutions", revolutions);
-            telemetry.addData("Encoder Angle (Degrees)", angle);
-            telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
+            //telemetry.addData("Encoder Revolutions", revolutions);
+            //telemetry.addData("Encoder Angle (Degrees)", angle);
+            //telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
 
             telemetry.addData("FLW Motor Power", FLW.getPower());
             telemetry.addData("FRW Motor Power", FRW.getPower());
@@ -94,15 +70,12 @@ public class BBOpMode1 extends LinearOpMode {
             telemetry.addData("Linear Slide Power", LS.getPower());
             telemetry.addData("LS Position", LS.getCurrentPosition());
 
-            telemetry.addData("Outtake Claw Servo Position", Claw.getPosition());
-
             telemetry.addData("Status", "Running");
             telemetry.update();
         }
     }
 
     public void moveWheels(Gamepad movepad){
-
 
         //right wheels are backward
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
@@ -122,21 +95,15 @@ public class BBOpMode1 extends LinearOpMode {
         double strafePower = strafeL10-strafeR10;
         telemetry.addData("strafeRight", strafeRight);
         telemetry.addData("strafeLeft", strafeLeft);
-
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
         double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
 
-
-
         if(movepad.x){
-
             drivePower*=0.5;
             turnPower*=0.5;
             strafePower+=0.5;
         }
-
-
 
         telemetry.addData("drivePower", drivePower);
         telemetry.addData("strafePower", strafePower);
@@ -148,11 +115,6 @@ public class BBOpMode1 extends LinearOpMode {
             turnPower*=0.5;
             strafePower+=0.5;
         }
-
-
-<<<<<<< Updated upstream
-
-
 
         boolean one = true;
         if(drivePower != 0) {
@@ -194,63 +156,15 @@ public class BBOpMode1 extends LinearOpMode {
             FLW.setPower(turnPower);
             BRW.setPower(turnPower);
             BLW.setPower(turnPower);
-        }else {
-            counter =0;
-=======
-        boolean one = true;
-        boolean two = true;
-
-        if(drivePower != 0) {
-
-            if(counter > 5){
-                one = false;
-            }
-
-            if(one) {
-                counter++;
-            }
-
-            FRW.setPower(drivePower * 0.2*counter);
-            FLW.setPower(-drivePower * 0.2*counter);
-            BRW.setPower(drivePower * 0.2*counter);
-            BLW.setPower(-drivePower * 0.2*counter);
-
-
-        } else if(strafePower != 0){
-
-            if(counter > 5){
-                two = false;
-            }
-
-            if(two) {
-                counter++;
-            }
-
-            FRW.setPower(-strafePower * 0.2*counter);
-            FLW.setPower(-strafePower * 0.2*counter);
-            BRW.setPower(strafePower * 0.2*counter);
-            BLW.setPower(strafePower * 0.2*counter);
-
-        } else if(turnPower != 0) {
-
-            FRW.setPower(turnPower);
-            FLW.setPower(turnPower);
-            BRW.setPower(turnPower);
-            BLW.setPower(turnPower);
 
         } else {
-
->>>>>>> Stashed changes
+            counter = 0;
             FRW.setPower(0);
             FLW.setPower(0);
             BRW.setPower(0);
             BLW.setPower(0);
-
         }
-
     }
-
-
 
     public void moveArm(Gamepad armpad){
 
@@ -261,57 +175,7 @@ public class BBOpMode1 extends LinearOpMode {
         }
 
         if(armpad.circle){
-            if(){
-                wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
+            //wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-        /*
-        if(armpad.left_stick_y > 0.25 || armpad.left_stick_y < -0.25) {
-            VLS.setPower(-armpad.left_stick_y);
-        } else {
-            VLS.setPower(0);
-        }
-
-        if(armpad.right_stick_y > 0.25 || armpad.right_stick_y < -0.25) {
-            HLS.setPower(-armpad.right_stick_y);
-        } else {
-            HLS.setPower(0);
-        }
-
-        if(armpad.right_trigger>0.5) {
-            if(Claw.getPosition()>0) {
-                Claw.setPosition(Claw.getPosition() - 0.01);
-            }
-        }
-
-        if(armpad.right_bumper) {
-            if(Claw.getPosition()<0.5) {
-                Claw.setPosition(Claw.getPosition() + 0.01);
-            }
-        }
-
-        //writs
-        if(armpad.left_trigger>0.5) {
-            if(Wrist.getPosition()>0) {
-                Wrist.setPosition(Wrist.getPosition() - 0.01);
-            }
-        }
-
-        if(armpad.left_bumper) {
-            if(Wrist.getPosition()<1) {
-                Wrist.setPosition(Wrist.getPosition() + 0.01);
-            }
-        }
-
-        if(armpad.x) {
-            Bucket.setPosition(0.1);
-        }
-
-        if(Bucket.getPosition()<0.33) {
-            Bucket.setPosition(Bucket.getPosition() + 0.001);
-        }
-        */
-
-
     }
 }
