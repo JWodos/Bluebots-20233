@@ -150,8 +150,42 @@ public class BBOpMode1 extends LinearOpMode {
 
     public void moveArm(Gamepad armpad){
 
-        LWD.setPower(1);
-        RWD.setPower(1);
+        //95d
+        int wdUpPosition = 2841;
+        //5degree
+        int wdDownPosition = 149;
+
+
+        boolean wdUp=false;
+        LWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        if(Math.abs(armpad.left_stick_y)> 0.25) {
+            LS.setPower(-armpad.left_stick_y);
+        } else {
+            LS.setPower(0);
+        }
+
+
+
+
+        if(armpad.circle){
+            if(!wdUp){
+                //test wormdrive (how much power give 90 degree --> assign that much power
+                wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                wormDL.setTargetPosition(wdUpPosition);
+                wormDR.setTargetPosition(wdUpPosition);
+
+
+                wdUp = true;
+            }else{
+                wormDL.setTargetPosition(wdDownPosition);
+                wormDR.setTargetPosition(wdDownPosition);
+                wdUp = false;
+            }
+        }
+
 
         /*
         if(Math.abs(armpad.left_stick_y)> 0.25) {
