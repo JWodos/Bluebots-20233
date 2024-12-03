@@ -137,6 +137,7 @@ public class BBOpMode1 extends LinearOpMode {
 
     public void moveArm(Gamepad armpad){
 
+        /*
         //95d
         int wdUpPosition = 2841;
         //5degree
@@ -165,5 +166,6 @@ public class BBOpMode1 extends LinearOpMode {
                 wdUp = false;
             }
         }
+         */
     }
 }
