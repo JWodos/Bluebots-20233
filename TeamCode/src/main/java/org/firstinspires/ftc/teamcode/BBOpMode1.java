@@ -81,22 +81,9 @@ public class BBOpMode1 extends LinearOpMode {
         double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
 
-        if(movepad.x){
-            drivePower*=0.5;
-            turnPower*=0.5;
-            strafePower+=0.5;
-        }
-
         telemetry.addData("drivePower", drivePower);
         telemetry.addData("strafePower", strafePower);
         telemetry.addData("turnPower", turnPower);
-
-        if(movepad.x){
-            telemetry.addData("wendy", movepad.x);
-            drivePower*=0.5;
-            turnPower*=0.5;
-            strafePower+=0.5;
-        }
 
         boolean one = true;
         if(drivePower != 0) {
@@ -155,46 +142,28 @@ public class BBOpMode1 extends LinearOpMode {
         //5degree
         int wdDownPosition = 149;
 
-
         boolean wdUp=false;
         LWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
         if(Math.abs(armpad.left_stick_y)> 0.25) {
-            LS.setPower(-armpad.left_stick_y);
+            ARM.setPower(-armpad.left_stick_y);
         } else {
-            LS.setPower(0);
+            ARM.setPower(0);
         }
-
-
-
 
         if(armpad.circle){
             if(!wdUp){
                 //test wormdrive (how much power give 90 degree --> assign that much power
-                wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                wormDL.setTargetPosition(wdUpPosition);
-                wormDR.setTargetPosition(wdUpPosition);
-
-
+                LWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                LWD.setTargetPosition(wdUpPosition);
+                RWD.setTargetPosition(wdUpPosition);
                 wdUp = true;
             }else{
-                wormDL.setTargetPosition(wdDownPosition);
-                wormDR.setTargetPosition(wdDownPosition);
+                LWD.setTargetPosition(wdDownPosition);
+                RWD.setTargetPosition(wdDownPosition);
                 wdUp = false;
             }
         }
-
-
-        /*
-        if(Math.abs(armpad.left_stick_y)> 0.25) {
-            LWD.setPower(-armpad.left_stick_y);
-            RWD.setPower(-armpad.left_stick_y);
-        } else {
-            LWD.setPower(0);
-            RWD.setPower(0);
-        }
-         */
     }
 }
