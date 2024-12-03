@@ -34,6 +34,11 @@ public class BBOpMode1 extends LinearOpMode {
 
         RWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RWD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //encoder
+
+        ARM= hardwareMap.get(DcMotor.class,"LS");
+        Claw = hardwareMap.get(Servo.class,"Claw");
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -162,9 +167,9 @@ public class BBOpMode1 extends LinearOpMode {
 
 
         if(Math.abs(armpad.left_stick_y)> 0.25) {
-            LS.setPower(-armpad.left_stick_y);
+            ARM.setPower(-armpad.left_stick_y);
         } else {
-            LS.setPower(0);
+            ARM.setPower(0);
         }
 
 
@@ -173,15 +178,16 @@ public class BBOpMode1 extends LinearOpMode {
         if(armpad.circle){
             if(!wdUp){
                 //test wormdrive (how much power give 90 degree --> assign that much power
-                wormDL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                wormDL.setTargetPosition(wdUpPosition);
-                wormDR.setTargetPosition(wdUpPosition);
+                RWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                LWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                LWD.setTargetPosition(wdUpPosition);
+                RWD.setTargetPosition(wdUpPosition);
 
 
                 wdUp = true;
             }else{
-                wormDL.setTargetPosition(wdDownPosition);
-                wormDR.setTargetPosition(wdDownPosition);
+                LWD.setTargetPosition(wdDownPosition);
+                RWD.setTargetPosition(wdDownPosition);
                 wdUp = false;
             }
         }
