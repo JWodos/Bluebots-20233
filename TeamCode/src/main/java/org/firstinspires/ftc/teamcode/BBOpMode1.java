@@ -77,6 +77,7 @@ public class BBOpMode1 extends LinearOpMode {
         double strafePower = strafeL10-strafeR10;
         telemetry.addData("strafeRight", strafeRight);
         telemetry.addData("strafeLeft", strafeLeft);
+
         // turns the robot's (wheel) motors left and right using the game pad 1 right joystick
         double turnPower = movepad.right_stick_x;
         telemetry.addData("turnPower", turnPower);
@@ -95,36 +96,38 @@ public class BBOpMode1 extends LinearOpMode {
             if(one) {
                 counter++;
             }
-            FRW.setPower(drivePower * 0.2*counter);
-            FLW.setPower(-drivePower * 0.2*counter);
-            BRW.setPower(drivePower * 0.2*counter);
-            BLW.setPower(-drivePower * 0.2*counter);
+
+            FRW.setPower(drivePower * 0.01*counter);
+            FLW.setPower(drivePower * 0.01*counter);
+            BRW.setPower(drivePower * 0.01*counter);
+            BLW.setPower(-drivePower * 0.01*counter);
 
         } else if(strafePower != 0){
-            if(counter > 5){
+            if(counter > 100){
                 one = false;
             }
-              if(one) {
+
+            if(one) {
                 counter++;
             }
 
-            FRW.setPower(-strafePower * 0.2*counter);
-            FLW.setPower(-strafePower * 0.2*counter);
-            BRW.setPower(strafePower * 0.2*counter);
-            BLW.setPower(strafePower * 0.2*counter);
+            FRW.setPower(-strafePower * 0.01*counter);
+            FLW.setPower(strafePower * 0.01*counter);
+            BRW.setPower(strafePower * 0.01*counter);
+            BLW.setPower(strafePower * 0.01*counter);
 
         } else if(turnPower != 0) {
-            if(counter > 5){
+            if(counter > 100){
                 one = false;
             }
             if(one) {
                 counter++;
             }
 
-            FRW.setPower(turnPower);
+            FRW.setPower(-turnPower);
             FLW.setPower(turnPower);
-            BRW.setPower(turnPower);
-            BLW.setPower(turnPower);
+            BRW.setPower(-turnPower);
+            BLW.setPower(-turnPower);
 
         } else {
             counter = 0;
@@ -166,6 +169,6 @@ public class BBOpMode1 extends LinearOpMode {
                 wdUp = false;
             }
         }
-         */
+        */
     }
 }
