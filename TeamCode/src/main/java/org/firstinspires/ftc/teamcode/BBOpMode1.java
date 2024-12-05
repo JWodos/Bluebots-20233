@@ -35,6 +35,8 @@ public class BBOpMode1 extends LinearOpMode {
         RWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RWD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        ARM = hardwareMap.get(DcMotor.class,"ARM");
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -43,9 +45,6 @@ public class BBOpMode1 extends LinearOpMode {
         while (opModeIsActive()) {
             moveWheels(gamepad1);
             moveArm(gamepad2);
-
-            telemetry.addData("LWD Motor Power", LWD.getCurrentPosition());
-            telemetry.addData("RWD Motor Power", RWD.getCurrentPosition());
 
             telemetry.addData("FLW Motor Power", FLW.getPower());
             telemetry.addData("FRW Motor Power", FRW.getPower());
@@ -89,7 +88,7 @@ public class BBOpMode1 extends LinearOpMode {
         boolean one = true;
         if(drivePower != 0) {
 
-            if(counter > 5){
+            if(counter > 100){
                 one = false;
             }
 
@@ -140,35 +139,50 @@ public class BBOpMode1 extends LinearOpMode {
 
     public void moveArm(Gamepad armpad){
 
-        /*
         //95d
-        int wdUpPosition = 2841;
+        int wdUpPosition = 2200;
         //5degree
-        int wdDownPosition = 149;
+        int wdDownPosition = 800;
+
+        double Lposition = LWD.getCurrentPosition();
+        double Rposition = RWD.getCurrentPosition();
+
+        double CPR = 10766;
+        double revolutions = Rposition/CPR;
+        double angle = revolutions * 360;
+
+        //double angleNormalized = angle % 360;
+        // Show the position of the motor on telemetry
+        telemetry.addData("Encoder Position right", Rposition);
+        telemetry.addData("Encoder Position left", Lposition);
+        telemetry.addData("Encoder Revolutions", revolutions);
+        telemetry.addData("Encoder Angle", angle);
+
+        //telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
+
+        double wormdrivePower = -armpad.left_stick_y;
 
         boolean wdUp=false;
-        LWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        if(Math.abs(armpad.left_stick_y)> 0.25) {
-            ARM.setPower(-armpad.left_stick_y);
-        } else {
-            ARM.setPower(0);
+        if(wormdrivePower>0.25&&Rposition<wdUpPosition) {
+
+            //test wormdrive (how much power give 90 degree --> assign that much power
+
+            LWD.setPower(wormdrivePower*0.93);
+            RWD.setPower(wormdrivePower);
+
+        }else if(wormdrivePower<-0.25 && Rposition>wdDownPosition){
+
+            LWD.setPower(wormdrivePower*0.93);
+            RWD.setPower(wormdrivePower);
+
+        }else{
+            LWD.setPower(0);
+            RWD.setPower(0);
         }
 
-        if(armpad.circle){
-            if(!wdUp){
-                //test wormdrive (how much power give 90 degree --> assign that much power
-                LWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                LWD.setTargetPosition(wdUpPosition);
-                RWD.setTargetPosition(wdUpPosition);
-                wdUp = true;
-            }else{
-                LWD.setTargetPosition(wdDownPosition);
-                RWD.setTargetPosition(wdDownPosition);
-                wdUp = false;
-            }
-        }
-        */
+        //if(Math.abs(armpad.right_stick_y)>0.25&&
+        telemetry.addData("wormdrive power", -wormdrivePower);
+
     }
 }
