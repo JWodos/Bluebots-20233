@@ -29,12 +29,6 @@ public class BBOpMode1 extends LinearOpMode {
         LWD = hardwareMap.get(DcMotor.class,"LWD");
         RWD = hardwareMap.get(DcMotor.class,"RWD");
 
-        LWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LWD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        RWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RWD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         ARM = hardwareMap.get(DcMotor.class,"ARM");
 
         telemetry.addData("Status", "Initialized");
@@ -69,8 +63,8 @@ public class BBOpMode1 extends LinearOpMode {
         telemetry.addData("driveBack", driveBack);
 
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
-        boolean strafeLeft= movepad.dpad_left;
-        boolean strafeRight= movepad.dpad_right;
+        boolean strafeLeft= movepad.dpad_right;
+        boolean strafeRight= movepad.dpad_left;
         int strafeL10 = strafeLeft ? 1 : 0;
         int strafeR10 = strafeRight ? 1 : 0;
         double strafePower = strafeL10-strafeR10;
@@ -88,7 +82,7 @@ public class BBOpMode1 extends LinearOpMode {
         boolean one = true;
         if(drivePower != 0) {
 
-            if(counter > 100){
+            if(counter > 10){
                 one = false;
             }
 
@@ -96,13 +90,13 @@ public class BBOpMode1 extends LinearOpMode {
                 counter++;
             }
 
-            FRW.setPower(drivePower * 0.01*counter);
-            FLW.setPower(drivePower * 0.01*counter);
-            BRW.setPower(drivePower * 0.01*counter);
-            BLW.setPower(-drivePower * 0.01*counter);
+            FRW.setPower(drivePower * 0.1*counter);
+            FLW.setPower(drivePower * 0.1*counter);
+            BRW.setPower(drivePower * 0.1*counter);
+            BLW.setPower(-drivePower * 0.1*counter);
 
         } else if(strafePower != 0){
-            if(counter > 100){
+            if(counter > 10){
                 one = false;
             }
 
@@ -110,23 +104,23 @@ public class BBOpMode1 extends LinearOpMode {
                 counter++;
             }
 
-            FRW.setPower(-strafePower * 0.01*counter);
-            FLW.setPower(strafePower * 0.01*counter);
-            BRW.setPower(strafePower * 0.01*counter);
-            BLW.setPower(strafePower * 0.01*counter);
+            FRW.setPower(-strafePower * 0.1*counter);
+            FLW.setPower(strafePower * 0.1*counter);
+            BRW.setPower(strafePower * 0.1*counter);
+            BLW.setPower(strafePower * 0.1*counter);
 
         } else if(turnPower != 0) {
-            if(counter > 100){
+            if(counter > 10){
                 one = false;
             }
             if(one) {
                 counter++;
             }
 
-            FRW.setPower(-turnPower);
-            FLW.setPower(turnPower);
-            BRW.setPower(-turnPower);
-            BLW.setPower(-turnPower);
+            FRW.setPower(-turnPower * 0.1*counter);
+            FLW.setPower(turnPower * 0.1*counter);
+            BRW.setPower(-turnPower * 0.1*counter);
+            BLW.setPower(-turnPower * 0.1*counter);
 
         } else {
             counter = 0;
@@ -140,9 +134,10 @@ public class BBOpMode1 extends LinearOpMode {
     public void moveArm(Gamepad armpad){
 
         //95d
-        int wdUpPosition = 2200;
+        int wdUpPosition = 2400;
         //5degree
-        int wdDownPosition = 800;
+        int wdDownPosition = 300;
+        int startPosition = 1125;
 
         double Lposition = LWD.getCurrentPosition();
         double Rposition = RWD.getCurrentPosition();
@@ -153,36 +148,55 @@ public class BBOpMode1 extends LinearOpMode {
 
         //double angleNormalized = angle % 360;
         // Show the position of the motor on telemetry
-        telemetry.addData("Encoder Position right", Rposition);
-        telemetry.addData("Encoder Position left", Lposition);
-        telemetry.addData("Encoder Revolutions", revolutions);
-        telemetry.addData("Encoder Angle", angle);
+        telemetry.addData("RWD Position", Rposition);
+        telemetry.addData("LWD Position", Lposition);
+        telemetry.addData("WD Revolutions", revolutions);
+        telemetry.addData("WD Angle", angle);
 
         //telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
 
+        //arm encoders
+        double armPosition = ARM.getCurrentPosition();
+        double limitLength = 34.5/Math.cos(Math.abs(angle));
+
+
+        telemetry.addData("ARM Position", armPosition);
+        telemetry.addData("ARM limitLength", limitLength);
+
+
         double wormdrivePower = -armpad.left_stick_y;
+        double armPower = -armpad.right_stick_y;
+
+        LWD.setTargetPosition(startPosition);
+        RWD.setTargetPosition(startPosition);
+        LWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RWD.setPower(wormdrivePower);
+        LWD.setPower(wormdrivePower*0.94);
 
         boolean wdUp=false;
 
-        if(wormdrivePower>0.25&&Rposition<wdUpPosition) {
-
+        if(wormdrivePower>0.25&& Lposition<wdUpPosition) {
             //test wormdrive (how much power give 90 degree --> assign that much power
-
-            LWD.setPower(wormdrivePower*0.93);
             RWD.setPower(wormdrivePower);
-
-        }else if(wormdrivePower<-0.25 && Rposition>wdDownPosition){
-
-            LWD.setPower(wormdrivePower*0.93);
+            LWD.setPower(wormdrivePower*0.94);
+        }else if(wormdrivePower<-0.25 && Lposition>wdDownPosition){
             RWD.setPower(wormdrivePower);
-
+            LWD.setPower(wormdrivePower*0.94);
         }else{
             LWD.setPower(0);
             RWD.setPower(0);
         }
 
-        //if(Math.abs(armpad.right_stick_y)>0.25&&
-        telemetry.addData("wormdrive power", -wormdrivePower);
+        //arm
+        if(armPower> 0.25 && armPosition<limitLength) {
+            ARM.setPower(armPower);
+        } else if(armPower<-0.25 && armPosition>0){
+            ARM.setPower(armPower);
+        }else{
+            ARM.setPower(0);
+        }
 
+        telemetry.addData("wormdrive power", -wormdrivePower);
     }
 }
