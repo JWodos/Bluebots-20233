@@ -63,8 +63,8 @@ public class BBOpMode1 extends LinearOpMode {
         telemetry.addData("driveBack", driveBack);
 
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
-        boolean strafeLeft= movepad.dpad_right;
         boolean strafeRight= movepad.dpad_left;
+        boolean strafeLeft= movepad.dpad_right;
         int strafeL10 = strafeLeft ? 1 : 0;
         int strafeR10 = strafeRight ? 1 : 0;
         double strafePower = strafeL10-strafeR10;
@@ -104,6 +104,7 @@ public class BBOpMode1 extends LinearOpMode {
                 counter++;
             }
 
+            //-1 to strafe right
             FRW.setPower(-strafePower * 0.1*counter);
             FLW.setPower(strafePower * 0.1*counter);
             BRW.setPower(strafePower * 0.1*counter);
@@ -136,10 +137,9 @@ public class BBOpMode1 extends LinearOpMode {
         //95d
         int wdUpPosition = 2400;
         //5degree
-        int wdDownPosition = 300;
+        int wdDownPosition = 100;
         int startPosition = 1125;
 
-        double Lposition = LWD.getCurrentPosition();
         double Rposition = RWD.getCurrentPosition();
 
         double CPR = 10766;
@@ -149,54 +149,41 @@ public class BBOpMode1 extends LinearOpMode {
         //double angleNormalized = angle % 360;
         // Show the position of the motor on telemetry
         telemetry.addData("RWD Position", Rposition);
-        telemetry.addData("LWD Position", Lposition);
         telemetry.addData("WD Revolutions", revolutions);
         telemetry.addData("WD Angle", angle);
 
         //telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
 
         //arm encoders
-        double armPosition = ARM.getCurrentPosition();
-        double limitLength = 34.5/Math.cos(Math.abs(angle));
-
+        double armPosition = -ARM.getCurrentPosition();
+        double limitLength = (34.5/Math.cos(Math.abs(angle)))*55;
+        if(limitLength >= 3500){
+            limitLength = 3500;
+        }
 
         telemetry.addData("ARM Position", armPosition);
         telemetry.addData("ARM limitLength", limitLength);
 
-
         double wormdrivePower = -armpad.left_stick_y;
         double armPower = -armpad.right_stick_y;
 
-        LWD.setTargetPosition(startPosition);
-        RWD.setTargetPosition(startPosition);
-        LWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RWD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RWD.setPower(wormdrivePower);
-        LWD.setPower(wormdrivePower*0.94);
-
-        boolean wdUp=false;
-
-        if(wormdrivePower>0.25&& Lposition<wdUpPosition) {
+        if(wormdrivePower>0.25&& Rposition<wdUpPosition) {
             //test wormdrive (how much power give 90 degree --> assign that much power
             RWD.setPower(wormdrivePower);
-            LWD.setPower(wormdrivePower*0.94);
-        }else if(wormdrivePower<-0.25 && Lposition>wdDownPosition){
+        }else if(wormdrivePower<-0.25 && Rposition>wdDownPosition){
             RWD.setPower(wormdrivePower);
-            LWD.setPower(wormdrivePower*0.94);
         }else{
-            LWD.setPower(0);
             RWD.setPower(0);
         }
 
         //arm
         if(armPower> 0.25 && armPosition<limitLength) {
-            ARM.setPower(armPower);
+            ARM.setPower(-armPower);
         } else if(armPower<-0.25 && armPosition>0){
-            ARM.setPower(armPower);
+            ARM.setPower(-armPower);
         }else{
             ARM.setPower(0);
         }
 
-        telemetry.addData("wormdrive power", -wormdrivePower);
     }
 }
