@@ -52,25 +52,25 @@ public class BBAutoMode1 extends LinearOpMode {
 
             Claw.setPosition(1);
             Wrist.setPosition(0);
-            move(1);
-            arm(0.5);
 
-            //arm(-1);
-            //move(-1);
-            //strafeRight(30);
+            move(1, 0.5);
+            strafe(1, 0.5);
+            arm(0.5);
+            strafe(5, -0.5);
+            move(1, -0.5);
         }
     }
 
-    public void move(double inches) {
+    public void move(double inches, double power) {
 
         double count = inches;
-        count*=4500;
+        count*=7750;
 
         while(count > 0) {
-            FLW.setPower(0.5);
-            FRW.setPower(0.5);
-            BLW.setPower(-0.5);
-            BRW.setPower(0.5);
+            FLW.setPower(power);
+            FRW.setPower(power);
+            BLW.setPower(-power);
+            BRW.setPower(power);
             count--;
         }
 
@@ -78,10 +78,30 @@ public class BBAutoMode1 extends LinearOpMode {
         FRW.setPower(0);
         BLW.setPower(0);
         BRW.setPower(0);
+        sleep(250);
+    }
+
+    public void strafe(double inches, double power) {
+
+        double count = inches;
+        count*=10000;
+
+        while(count > 0) {
+            FLW.setPower(-power);
+            FRW.setPower(power);
+            BLW.setPower(-power);
+            BRW.setPower(-power);
+            count--;
+        }
+
+        FLW.setPower(0);
+        FRW.setPower(0);
+        BLW.setPower(0);
+        BRW.setPower(0);
+        sleep(250);
     }
 
     public void arm(double armPower){
-
         double Rposition = RWD.getCurrentPosition();
 
         double CPR = 10766;
@@ -92,8 +112,8 @@ public class BBAutoMode1 extends LinearOpMode {
         double cosRad = Math.cos(Math.abs(rad));
         double limitLength = (34.5/cosRad)*55;
 
-        if(limitLength>=3500 || rad >.4){
-            limitLength=3500;
+        if(limitLength>=1300){
+            limitLength=1300;
         }
 
         while(armPosition<limitLength){
@@ -102,5 +122,6 @@ public class BBAutoMode1 extends LinearOpMode {
         }
 
         ARM.setPower(0);
+        sleep(250);
     }
 }

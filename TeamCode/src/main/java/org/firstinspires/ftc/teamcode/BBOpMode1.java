@@ -17,10 +17,12 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor ARM;
     private Servo Claw;
     private Servo Wrist;
+    private int upPos;
+    private int downPos;
 
+    private float startingPos;
 
     private int counter;
-    private int armCounter;
     private boolean start;
 
     @Override
@@ -35,6 +37,9 @@ public class BBOpMode1 extends LinearOpMode {
         Wrist = hardwareMap.get(Servo.class,"Wrist");
         ARM = hardwareMap.get(DcMotor.class,"ARM");
         start = true;
+
+        RWD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RWD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         ARM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         ARM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -137,75 +142,43 @@ public class BBOpMode1 extends LinearOpMode {
             FLW.setPower(0);
             BRW.setPower(0);
             BLW.setPower(0);
-
-
         }
-
     }
 
-
-
-
-
-
     public void moveArm(Gamepad armpad){
-
-        //95d
-        //2841
-        int wdUpPosition = 2100;
-        //5degree
-        //149
-        int wdDownPosition = 50;
-        int startPosition = 1125;
-        //encoder
+        if(start) {
+            startingPos = RWD.getCurrentPosition();
+            upPos = Math.round(startingPos)+1025;
+            downPos = Math.round(startingPos)-1575;
+            start = false;
+        }
 
         double Rposition = RWD.getCurrentPosition();
-
         double CPR = 10766;
-        double revolutions = Rposition/CPR;
+        double revolutions = (Rposition+1675)/CPR;
         double rad = revolutions * 2;
 
-        //double angleNormalized = angle % 360;
-        // Show the position of the motor on telemetry
-        telemetry.addData("RWD Position", Rposition);
-
-        telemetry.addData("WD Revolutions", revolutions);
-        telemetry.addData("WD Rad", rad);
-        //telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
-
-        //arm encoders
         double armPosition = -ARM.getCurrentPosition();
-        double cosRad = Math.cos(Math.abs(rad));
+        double cosRad = Math.cos(Math.abs(rad*Math.PI));
         double limitLength = (34.5/cosRad)*55;
 
-        if(limitLength>=3500 || rad >.4){
+        if(limitLength>=3500|| rad>.4){
             limitLength=3500;
         }
-        //double limitLength = ;
 
         telemetry.addData("ARM Position", armPosition);
         telemetry.addData("cosAng", cosRad);
         telemetry.addData("ARM limitLength", limitLength);
+        telemetry.addData("RWD Position", Rposition);
+        telemetry.addData("WD Rad", rad);
 
         double wormdrivePower = -armpad.left_stick_y;
         double armPower = -armpad.right_stick_y;
 
-        if(start) {
-            RWD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RWD.setPower(1);
-            armCounter++;
-            if(armCounter >= 90) {
-                RWD.setPower(0);
-                start = false;
-            }
-        }
-
-        if(wormdrivePower>0.25 && Rposition<wdUpPosition) {
+        if(wormdrivePower>0.25 && Rposition<upPos) {
             //test wormdrive (how much power give 90 degree --> assign that much power
             RWD.setPower(wormdrivePower);
-
-
-        }else if(wormdrivePower<-0.25 && Rposition>wdDownPosition){
+        }else if(wormdrivePower<-0.25 && Rposition>downPos){
             RWD.setPower(wormdrivePower);
         }else{
             RWD.setPower(0);
@@ -220,26 +193,24 @@ public class BBOpMode1 extends LinearOpMode {
             ARM.setPower(0);
         }
 
-
         if(armpad.right_trigger > 0) {
             Claw.setPosition(1);
         } else {
             Claw.setPosition(0.5);
         }
 
-        if(armpad.triangle) {
-            if(Wrist.getPosition() < 0.5) {
-                Wrist.setPosition(1);
-            } else {
-                Wrist.setPosition(0);
-            }
+        if(armpad.left_trigger > 0) {
+            Wrist.setPosition(1);
+        } else {
+            Wrist.setPosition(0);
         }
 
         telemetry.addData("wormdrive power", -wormdrivePower);
         telemetry.addData("armPower", armPower);
         telemetry.addData("first time", start);
+        telemetry.addData("wristPos", Wrist.getPosition());
+        telemetry.addData("clawPos", Claw.getPosition());
         //telemetry.addData("wormdrive power", -wormdrivePower);
-
 
     }
 }
