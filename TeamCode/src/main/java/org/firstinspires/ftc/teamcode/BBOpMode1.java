@@ -13,11 +13,15 @@ public class BBOpMode1 extends LinearOpMode {
     private DcMotor BLW;
     private DcMotor BRW;
 
-    private DcMotor LWD;
     private DcMotor RWD;
     private DcMotor ARM;
+    private Servo Claw;
+    private Servo Wrist;
+
 
     private int counter;
+    private int armCounter;
+    private boolean start;
 
     @Override
     public void runOpMode() {
@@ -26,10 +30,14 @@ public class BBOpMode1 extends LinearOpMode {
         BLW = hardwareMap.get(DcMotor.class, "BLW");
         BRW = hardwareMap.get(DcMotor.class, "BRW");
 
-        LWD = hardwareMap.get(DcMotor.class,"LWD");
         RWD = hardwareMap.get(DcMotor.class,"RWD");
-
+        Claw = hardwareMap.get(Servo.class,"Claw");
+        Wrist = hardwareMap.get(Servo.class,"Wrist");
         ARM = hardwareMap.get(DcMotor.class,"ARM");
+        start = true;
+
+        ARM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ARM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -50,7 +58,7 @@ public class BBOpMode1 extends LinearOpMode {
         }
     }
 
-    public void moveWheels(Gamepad movepad){
+    public void moveWheels(Gamepad movepad) {
 
         //right wheels are backward
         // moves the robot's (wheel) motors forward and back using the game pad 1 left joystick
@@ -58,16 +66,16 @@ public class BBOpMode1 extends LinearOpMode {
         boolean driveBack = movepad.dpad_down;
         int driveF10 = driveFor ? 1 : 0;
         int driveB10 = driveBack ? 1 : 0;
-        double drivePower = driveF10-driveB10;
+        double drivePower = driveF10 - driveB10;
         telemetry.addData("driveFor", driveFor);
         telemetry.addData("driveBack", driveBack);
 
         // moves the robot's (wheel) motors left and right using the game pad 1 left joystick
-        boolean strafeRight= movepad.dpad_left;
-        boolean strafeLeft= movepad.dpad_right;
+        boolean strafeRight = movepad.dpad_left;
+        boolean strafeLeft = movepad.dpad_right;
         int strafeL10 = strafeLeft ? 1 : 0;
         int strafeR10 = strafeRight ? 1 : 0;
-        double strafePower = strafeL10-strafeR10;
+        double strafePower = strafeL10 - strafeR10;
         telemetry.addData("strafeRight", strafeRight);
         telemetry.addData("strafeLeft", strafeLeft);
 
@@ -80,48 +88,48 @@ public class BBOpMode1 extends LinearOpMode {
         telemetry.addData("turnPower", turnPower);
 
         boolean one = true;
-        if(drivePower != 0) {
+        if (drivePower != 0) {
 
-            if(counter > 10){
+            if (counter > 10) {
                 one = false;
             }
 
-            if(one) {
+            if (one) {
                 counter++;
             }
 
-            FRW.setPower(drivePower * 0.1*counter);
-            FLW.setPower(drivePower * 0.1*counter);
-            BRW.setPower(drivePower * 0.1*counter);
-            BLW.setPower(-drivePower * 0.1*counter);
+            FRW.setPower(drivePower * 0.1 * counter);
+            FLW.setPower(drivePower * 0.1 * counter);
+            BRW.setPower(drivePower * 0.1 * counter);
+            BLW.setPower(-drivePower * 0.1 * counter);
 
-        } else if(strafePower != 0){
-            if(counter > 10){
+        } else if (strafePower != 0) {
+            if (counter > 10) {
                 one = false;
             }
 
-            if(one) {
+            if (one) {
                 counter++;
             }
 
             //-1 to strafe right
-            FRW.setPower(-strafePower * 0.1*counter);
-            FLW.setPower(strafePower * 0.1*counter);
-            BRW.setPower(strafePower * 0.1*counter);
-            BLW.setPower(strafePower * 0.1*counter);
+            FRW.setPower(-strafePower * 0.1 * counter);
+            FLW.setPower(strafePower * 0.1 * counter);
+            BRW.setPower(strafePower * 0.1 * counter);
+            BLW.setPower(strafePower * 0.1 * counter);
 
-        } else if(turnPower != 0) {
-            if(counter > 10){
+        } else if (turnPower != 0) {
+            if (counter > 10) {
                 one = false;
             }
-            if(one) {
+            if (one) {
                 counter++;
             }
 
-            FRW.setPower(-turnPower * 0.1*counter);
-            FLW.setPower(turnPower * 0.1*counter);
-            BRW.setPower(-turnPower * 0.1*counter);
-            BLW.setPower(-turnPower * 0.1*counter);
+            FRW.setPower(-turnPower * 0.1 * counter);
+            FLW.setPower(turnPower * 0.1 * counter);
+            BRW.setPower(-turnPower * 0.1 * counter);
+            BLW.setPower(-turnPower * 0.1 * counter);
 
         } else {
             counter = 0;
@@ -129,47 +137,74 @@ public class BBOpMode1 extends LinearOpMode {
             FLW.setPower(0);
             BRW.setPower(0);
             BLW.setPower(0);
+
+
         }
+
     }
+
+
+
+
+
 
     public void moveArm(Gamepad armpad){
 
         //95d
-        int wdUpPosition = 2400;
+        //2841
+        int wdUpPosition = 2100;
         //5degree
-        int wdDownPosition = 100;
+        //149
+        int wdDownPosition = 50;
         int startPosition = 1125;
+        //encoder
 
         double Rposition = RWD.getCurrentPosition();
 
         double CPR = 10766;
         double revolutions = Rposition/CPR;
-        double angle = revolutions * 360;
+        double rad = revolutions * 2;
 
         //double angleNormalized = angle % 360;
         // Show the position of the motor on telemetry
         telemetry.addData("RWD Position", Rposition);
-        telemetry.addData("WD Revolutions", revolutions);
-        telemetry.addData("WD Angle", angle);
 
+        telemetry.addData("WD Revolutions", revolutions);
+        telemetry.addData("WD Rad", rad);
         //telemetry.addData("Encoder Angle - Normalized (Degrees)", angleNormalized);
 
         //arm encoders
         double armPosition = -ARM.getCurrentPosition();
-        double limitLength = (34.5/Math.cos(Math.abs(angle)))*55;
-        if(limitLength >= 3500){
-            limitLength = 3500;
+        double cosRad = Math.cos(Math.abs(rad));
+        double limitLength = (34.5/cosRad)*55;
+
+        if(limitLength>=3500 || rad >.4){
+            limitLength=3500;
         }
+        //double limitLength = ;
 
         telemetry.addData("ARM Position", armPosition);
+        telemetry.addData("cosAng", cosRad);
         telemetry.addData("ARM limitLength", limitLength);
 
         double wormdrivePower = -armpad.left_stick_y;
         double armPower = -armpad.right_stick_y;
 
-        if(wormdrivePower>0.25&& Rposition<wdUpPosition) {
+        if(start) {
+            RWD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RWD.setPower(1);
+            armCounter++;
+            if(armCounter >= 90) {
+                RWD.setPower(0);
+                start = false;
+            }
+        }
+
+        if(wormdrivePower>0.25 && Rposition<wdUpPosition) {
             //test wormdrive (how much power give 90 degree --> assign that much power
             RWD.setPower(wormdrivePower);
+
+
         }else if(wormdrivePower<-0.25 && Rposition>wdDownPosition){
             RWD.setPower(wormdrivePower);
         }else{
@@ -177,13 +212,34 @@ public class BBOpMode1 extends LinearOpMode {
         }
 
         //arm
-        if(armPower> 0.25 && armPosition<limitLength) {
+        if(armPower> 0.25 && armPosition<limitLength){
             ARM.setPower(-armPower);
         } else if(armPower<-0.25 && armPosition>0){
             ARM.setPower(-armPower);
         }else{
             ARM.setPower(0);
         }
+
+
+        if(armpad.right_trigger > 0) {
+            Claw.setPosition(1);
+        } else {
+            Claw.setPosition(0.5);
+        }
+
+        if(armpad.triangle) {
+            if(Wrist.getPosition() < 0.5) {
+                Wrist.setPosition(1);
+            } else {
+                Wrist.setPosition(0);
+            }
+        }
+
+        telemetry.addData("wormdrive power", -wormdrivePower);
+        telemetry.addData("armPower", armPower);
+        telemetry.addData("first time", start);
+        //telemetry.addData("wormdrive power", -wormdrivePower);
+
 
     }
 }
