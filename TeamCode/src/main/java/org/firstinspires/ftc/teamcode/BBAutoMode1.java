@@ -49,22 +49,31 @@ public class BBAutoMode1 extends LinearOpMode {
         waitForStart();
 
         if(opModeIsActive()) {
-
             Claw.setPosition(1);
-            Wrist.setPosition(0);
+            Wrist.setPosition(0.3);
 
+            //move foward
             move(1, 0.5);
+
+            //move right
             strafe(1, 0.5);
+
+            //extend
             arm(0.5);
+
+            Claw.setPosition(0);
+            //move right
             strafe(5, -0.5);
-            move(1, -0.5);
+
+            //move back
+            move(0.5, -0.5);
         }
     }
 
     public void move(double inches, double power) {
 
         double count = inches;
-        count*=7750;
+        count*=8050;
 
         while(count > 0) {
             FLW.setPower(power);
@@ -78,7 +87,7 @@ public class BBAutoMode1 extends LinearOpMode {
         FRW.setPower(0);
         BLW.setPower(0);
         BRW.setPower(0);
-        sleep(250);
+        sleep(500);
     }
 
     public void strafe(double inches, double power) {
@@ -98,7 +107,7 @@ public class BBAutoMode1 extends LinearOpMode {
         FRW.setPower(0);
         BLW.setPower(0);
         BRW.setPower(0);
-        sleep(250);
+        sleep(500);
     }
 
     public void arm(double armPower){
@@ -109,11 +118,11 @@ public class BBAutoMode1 extends LinearOpMode {
         double rad = revolutions * 2;
 
         double armPosition = -ARM.getCurrentPosition();
-        double cosRad = Math.cos(Math.abs(rad));
+        double cosRad = Math.cos(Math.abs(rad*Math.PI));
         double limitLength = (34.5/cosRad)*55;
 
-        if(limitLength>=1300){
-            limitLength=1300;
+        if(limitLength>=650){
+            limitLength=650;
         }
 
         while(armPosition<limitLength){
@@ -121,7 +130,8 @@ public class BBAutoMode1 extends LinearOpMode {
             ARM.setPower(-armPower);
         }
 
+        Wrist.setPosition(0);
         ARM.setPower(0);
-        sleep(250);
+        sleep(500);
     }
 }
